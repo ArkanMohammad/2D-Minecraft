@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Minecraft Grid</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- The start screen displays your background wallpaper image -->
+    <section id="start-screen">
+        <header class="menu-content">
+            <h2 class="author-title">By Arkan Mohamad</h2>
+            <button id="play-button">Let's Play</button>
+        </header>
+    </section>
+    <!-- The gameplay layout (Hidden until you click Let's Play) -->
+    <section id="game-container" style="display: none;">
+        <aside id="sidebar">
+            <h3>Block Inventory</h3>
+            <button class="block-selector active" data-type="grass">
+                <i class="color-preview grass"></i>
+                <span>Grass: <strong id="count-grass">0</strong></span>
+            </button>
+            <button class="block-selector" data-type="dirt">
+                <i class="color-preview dirt"></i>
+                <span>Dirt: <strong id="count-dirt">0</strong></span>
+            </button>
+            <button class="block-selector" data-type="stone">
+                <i class="color-preview stone"></i>
+                <span>Stone: <strong id="count-stone">0</strong></span>
+            </button>
+            <section class="instructions">
+                <p><strong>Controls:</strong><br>A / D: Move<br>Space: Jump<br>Click Canvas: Mine/Place</p>
+            </section>
+        </aside>        
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+    </section>
+    <!-- Hidden YouTube Player -->
+    <section id="youtube-player"></section>
+    <!-- Script file connections -->
+    <script src="src/core/app.js"></script>
+    <script src="src/core/grid.js"></script>
+    <script src="src/entities/blockManager.js"></script>
+    <script src="src/entities/player.js"></script>
+</body>
+</html>

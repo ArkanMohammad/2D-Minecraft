@@ -1,0 +1,138 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #111;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    overflow: hidden;
+}
+/* Starting Screen View - Wallpaper active here */
+#start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('https://4kwallpapers.com/images/walls/thumbs_3t/26243.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+.menu-content {
+    text-align: center;
+    background: none; /* Keeps it completely transparent so the image stays visible */
+    border: none;
+    box-shadow: none;
+}
+.author-title {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin: -80px 0 0 0;
+    letter-spacing: 2px;
+    /* Strong text shadows make your name pop cleanly on top of the bright sky image background */
+    text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.9), 0px 2px 5px rgba(0, 0, 0, 0.9);
+}
+#play-button {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 15px 50px;
+    margin-top: 250px;
+    background: #5c8e32;
+    color: white;
+    border: none;
+    border-bottom: 4px solid #3b5e20;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+#play-button:hover {
+    background: #6ba33b;
+    transform: translateY(-2px);
+}
+#play-button:active {
+    transform: translateY(2px);
+    border-bottom-width: 0px;
+}
+/* Gameplay View Screen Container Layout */
+#game-container {
+    display: flex;
+    gap: 20px;
+    background: #2c3e50;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+#sidebar {
+    width: 220px;
+    background: #34495e;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+#sidebar h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #bdc3c7;
+    padding-bottom: 5px;
+}
+.block-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: #2c3e50;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+}
+.block-selector.active {
+    border-color: #f1c40f;
+    background: #1a252f;
+}
+.color-preview {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+}
+/* Update these lines inside your style.css file */
+.color-preview.grass { 
+    background-image: url('https://i.pinimg.com/1200x/bd/cb/64/bdcb6414071ce880f3fa1dc18e2eda5b.jpg'); 
+    background-size: cover;
+}
+.color-preview.dirt { 
+    background-image: url('https://i.pinimg.com/736x/0e/1f/c2/0e1fc2e0638e878d3ba8db495152164c.jpg'); 
+    background-size: cover;
+}
+.color-preview.stone { 
+    background-image: url('https://64.media.tumblr.com/22a4c98f65d1241fde7be0299e3289e7/49f0582d0d0f904d-fc/s500x750/6f7b5ec22e628d1fdad364db01a62f05bf34cf17.png'); 
+    background-size: cover;
+}
+canvas {
+    border: 4px solid #1a252f;
+    border-radius: 6px;
+}
+/* Reset default browser button styles so they look exactly like your old divs */
+button.block-selector {
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    width: 100%;
+    outline: none;
+}
