@@ -5,6 +5,7 @@ function createBlock(gridX, gridY, type, imgElement) {
         gridY: gridY,
         type: type,
         image: imgElement,
+        selected: false,
         draw: function(ctx) {
             const pixelX = this.gridX * tileSize;
             const pixelY = this.gridY * tileSize;
@@ -13,7 +14,7 @@ function createBlock(gridX, gridY, type, imgElement) {
                 ctx.drawImage(this.image, pixelX, pixelY, tileSize, tileSize);
             } else {
                 // Temporary backup color parameters while the proxy links resolve over the web network
-                const fallbacks = { grass: '#2ecc71', dirt: '#875a36', stone: '#7f8c8d' };
+                const fallbacks = { grass: '#2ecc71', dirt: '#875a36', stone: '#7f8c8d', sky: '#3498db'};
                 ctx.fillStyle = fallbacks[this.type] || '#555';
                 ctx.fillRect(pixelX, pixelY, tileSize, tileSize);
             }
@@ -21,6 +22,11 @@ function createBlock(gridX, gridY, type, imgElement) {
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
             ctx.lineWidth = 1;
             ctx.strokeRect(pixelX, pixelY, tileSize, tileSize);
+            if (this.selected) {
+                ctx.strokeStyle = "yellow";
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(pixelX, pixelY, tileSize, tileSize);
+            }
         }
     };
 }

@@ -7,13 +7,15 @@ function createGrid(cols, rows) {
         initWorld: function(blockImages) {
             this.matrix = {}; // Reset world layout container safely
             // skyDepths heights for rolling hills
-            const skyDepths = [6, 5, 4, 5, 6, 7, 8, 7, 6, 5, 4, 5, 6, 7, 8, 7, 6, 5, 4, 5];
+            const skyDepths = [8, 7, 6, 7, 8, 9, 10, 9, 8, 7, 6, 7, 8, 9, 10, 9, 8, 7, 6, 7];
             for (let x = 0; x < this.cols; x++) {
                 // Determine the grass line row for this specific column
                 const grassRow = skyDepths[x];
                 for (let y = 0; y < this.rows; y++) {
-                    if((x===5 && y===6) || (x===6 && y===7) ||(x===7 && y===6) || (x===13 && y===6) || (x===14 && y===7) ||(x===15 && y===6)){
+                    if((x===5 && y===8) || (x===6 && y===9) ||(x===7 && y===8) || (x===13 && y===8) || (x===14 && y===9) ||(x===15 && y===8) || (x===10 && y===2)|| (x===7 && y===5) || (x===13 && y===5)){
                         this.matrix[`${x},${y}`] = createBlock(x, y, 'flower', blockImages.flower);
+                    }else if((x===5 && y===6) || (x===6 && y===5) ||(x===7 && y===6) || (x===8 && y===5)|| (x===9 && y===4) || (x===10 && y===4) || (x===10 && y===3) || (x===11 && y===4) || (x===12 && y===5)|| (x===13 && y===6) || (x===14 && y===5) ||(x===15 && y===6)){
+                        this.matrix[`${x},${y}`] = createBlock(x, y, 'grass', blockImages.grass);
                     }else if (y < grassRow) {
                         // SKY BLOCKS: Fill all empty space above ground
                         this.matrix[`${x},${y}`] = createBlock(x, y, 'sky', blockImages.sky);

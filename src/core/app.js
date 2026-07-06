@@ -109,7 +109,7 @@ function initGame() {
     gameState.initMenuController();
     grid = createGrid(20, 15);
     grid.initWorld(blockImages);
-    player = createPlayer(0, 190);
+    player = createPlayer(90, 190);
     window.addEventListener('keydown', e => { if (e.code in keys) keys[e.code] = true; });
     window.addEventListener('keyup', e => { if (e.code in keys) keys[e.code] = false; });
     const UISelectors = document.querySelectorAll('.block-selector');
@@ -127,8 +127,21 @@ function initGame() {
         const clickedGridY = Math.floor((e.clientY - rect.top) / grid.tileSize);
         if (clickedGridX < 0 || clickedGridX >= grid.cols || clickedGridY < 0 || clickedGridY >= grid.rows) return;
         const gridKey = `${clickedGridX},${clickedGridY}`;
+        // Remove selection from all blocks
+        for (let key in grid.matrix) {
+            if (grid.matrix[key]) {
+                grid.matrix[key].selected = false;
+            }
+        }
         if (grid.matrix[gridKey]) {
-            delete grid.matrix[gridKey];
+            grid.matrix[gridKey] = createBlock(
+                clickedGridX,
+                clickedGridY,
+                "sky",
+                blockImages.sky
+            );
+            // Keep the new Sky block selected
+            grid.matrix[gridKey].selected = true;
         } else {
             grid.matrix[gridKey] = createBlock(
                 clickedGridX, 
@@ -136,33 +149,23 @@ function initGame() {
                 activeSelectedType, 
                 blockImages[activeSelectedType]
             );
+            grid.matrix[gridKey].selected = true;
         }
         grid.updateBlockCounts();
     });
     gameLoop();
 }
-// Step 5: Handle Input
-function handleInput() {
-    player.vx = 0;
-    if (keys.KeyA) player.vx = -player.speed;
-    if (keys.KeyD) player.vx = player.speed;
-    if (keys.Space && !player.isJumping) {
-        player.vy = player.jumpForce;
-        player.isJumping = true;
-    }
-}
-// Step 6: Game Loop - NO BACKGROUND, just clear screen
+// Step 5: Game Loop - NO BACKGROUND, just clear screen
 function gameLoop() {
     if (gameState.isStarted) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         // Just draw a simple blue background
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        handleInput();
         player.update();
         grid.draw(ctx);
         player.draw(ctx);
     }
     requestAnimationFrame(gameLoop);
 }
-// Step 7Initialize the game environment and Start
+// Step 6: Initialize the game environment and Start
 initGame();
