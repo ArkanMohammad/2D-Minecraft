@@ -34,7 +34,7 @@ const audioManager = {
         });
     }
 };
-// Step 2: Game State
+// Step 2: Game State Managment - Track if the game has started and handle the menu controller
 const gameState = {
     isStarted: false,
     initMenuController: function() {
@@ -44,6 +44,8 @@ const gameState = {
                 document.getElementById('start-screen').style.display = 'none';
                 document.getElementById('game-container').style.display = 'flex';
                 this.isStarted = true;
+                // Move focus to window so keyboard controls work instantly
+                window.focus();
             });
         }
     }
@@ -56,7 +58,7 @@ const blockImages = {
     sky: new Image(),
     flower: new Image()
 };
-// Use images.weserv.nl proxy
+// Helper function to load images securely via proxy (Use images.weserv.nl proxy)
 function createProxyUrl(imageUrl, size = 40) {
     return `https://images.weserv.nl/?url=${encodeURIComponent(imageUrl)}&w=${size}&h=${size}&mask=rectangle`;
 }
@@ -103,69 +105,108 @@ setTimeout(() => {
 }, 5000);
 let grid;
 let player;
+//Global references for keys using strict KeyboardEvent codes
 const keys = { KeyA: false, KeyD: false, Space: false };
 // Step 4: Initializes the core game environment
 function initGame() {
     gameState.initMenuController();
     grid = createGrid(20, 15);
     grid.initWorld(blockImages);
-    player = createPlayer(90, 190);
-    window.addEventListener('keydown', e => { if (e.code in keys) keys[e.code] = true; });
-    window.addEventListener('keyup', e => { if (e.code in keys) keys[e.code] = false; });
+    player = createPlayer(0, 0);
+    // Strict event listeners catching precise physical key codes
+    window.addEventListener('keydown', e => { 
+        if (e.code in keys) {
+            keys[e.code] = true;
+            if (e.code === 'Space') e.preventDefault(); // Prevent page scroll on spacebar press
+        }
+    });
+    
+    window.addEventListener('keyup', e => { 
+        if (e.code in keys) {
+            keys[e.code] = false; 
+        }
+    });
+    // UI Block Selector Event Listeners
     const UISelectors = document.querySelectorAll('.block-selector');
     UISelectors.forEach(element => {
         element.addEventListener('click', () => {
-            document.querySelector('.block-selector.active').classList.remove('active');
+            const activeEl = document.querySelector('.block-selector.active');
+            if (activeEl) {
+                activeEl.classList.remove('active');
+            }
             element.classList.add('active');
             activeSelectedType = element.getAttribute('data-type');
+            window.focus();
         });
     });
-    canvas.addEventListener('mousedown', (e) => {
-        if (!gameState.isStarted) return;
-        const rect = canvas.getBoundingClientRect();
-        const clickedGridX = Math.floor((e.clientX - rect.left) / grid.tileSize);
-        const clickedGridY = Math.floor((e.clientY - rect.top) / grid.tileSize);
-        if (clickedGridX < 0 || clickedGridX >= grid.cols || clickedGridY < 0 || clickedGridY >= grid.rows) return;
-        const gridKey = `${clickedGridX},${clickedGridY}`;
-        // Remove selection from all blocks
-        for (let key in grid.matrix) {
-            if (grid.matrix[key]) {
-                grid.matrix[key].selected = false;
-            }
-        }
-        if (grid.matrix[gridKey]) {
-            grid.matrix[gridKey] = createBlock(
-                clickedGridX,
-                clickedGridY,
-                "sky",
-                blockImages.sky
-            );
-            // Keep the new Sky block selected
-            grid.matrix[gridKey].selected = true;
-        } else {
-            grid.matrix[gridKey] = createBlock(
-                clickedGridX, 
-                clickedGridY, 
-                activeSelectedType, 
-                blockImages[activeSelectedType]
-            );
-            grid.matrix[gridKey].selected = true;
-        }
-        grid.updateBlockCounts();
-    });
+    // Mouse click listener for mining and building
+    canvas.addEventListener('click', handleCanvasClick);
     gameLoop();
 }
-// Step 5: Game Loop - NO BACKGROUND, just clear screen
+// Step 5: Handle Mouse click logic (Mine and Place engine)
+function handleCanvasClick(e) {
+    if (!gameState.isStarted) return;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    // Turn screen click pixels into grid cell positions
+    const clickedGridX = Math.floor(mouseX / grid.tileSize);
+    const clickedGridY = Math.floor(mouseY / grid.tileSize);
+    // Exit if click falls outside canvas bounds
+    if (clickedGridX < 0 || clickedGridX >= grid.cols || clickedGridY < 0 || clickedGridY >= grid.rows) return;
+    
+    const gridKey = `${clickedGridX},${clickedGridY}`;
+    
+    // Clear yellow selected border on all blocks
+    for (let key in grid.matrix) {
+        if (grid.matrix[key]) {
+            grid.matrix[key].selected = false;
+        }
+    }
+    
+    if (grid.matrix[gridKey]) {
+        const targetBlock = grid.matrix[gridKey];
+     
+        if (activeSelectedType === 'shovel') {
+            // Mine Mode: If shovel is selected, replace current tile with sky
+            if (targetBlock.type !== 'sky') {
+                grid.matrix[gridKey] = createBlock(clickedGridX, clickedGridY, 'sky', blockImages.sky);
+                grid.matrix[gridKey].selected = true;
+            }
+        } else {
+            // Build Mode: If a block is chosen, replace sky tiles with it
+            if (targetBlock.type === 'sky') {
+                grid.matrix[gridKey] = createBlock(clickedGridX, clickedGridY, activeSelectedType, blockImages[activeSelectedType]);
+                grid.matrix[gridKey].selected = true;
+            }
+        }
+        
+        // Refresh sidebar counting balances
+        grid.updateBlockCounts();
+    }
+}
+// Step 6: Infinite frame logic refresh loop
 function gameLoop() {
     if (gameState.isStarted) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        // Just draw a simple blue background
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Apply walk velocity configurations
+        player.vx = 0;
+        if (keys['KeyA']) player.vx = -4;
+        if (keys['KeyD']) player.vx = 4;
+        //If pressing S, increase downward speed (fast drop)
+        if (keys['Space'] && player.vy === 0) {
+            player.vy = -10;
+        }
+        // Run player physics updates
+        player.vy += player.gravity;
         player.update();
+        // Draw blue backdrop environment layer
+        ctx.fillStyle = '#54b4f3';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Render updated map grid layouts and player
         grid.draw(ctx);
         player.draw(ctx);
     }
     requestAnimationFrame(gameLoop);
 }
-// Step 6: Initialize the game environment and Start
+// Step 7: Initialize the game environment and Start
 initGame();

@@ -15,7 +15,26 @@
         </header>
     </section>
     <!-- The gameplay layout (Hidden until you click Let's Play) -->
-    <section id="game-container" style="display: none;">
+    <section id="game-container" style="display: none; align-items: flex-start; gap: 20px;">
+        
+        <!-- شريط أدوات الهدم الجديد على اليسار (تمت إضافته بالكامل دون حذف أي شيء) -->
+        <aside id="tools-sidebar" style="background-color: #222; padding: 15px; border-radius: 5px; color: #fff; width: 180px; box-sizing: border-box;">
+            <h3 style="margin-top: 0; font-size: 16px; border-bottom: 1px solid #444; padding-bottom: 5px;">Mining Tools</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="block-selector" data-type="shovel" style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; background: #333; color: white; border: 1px solid #555; border-radius: 4px; cursor: pointer; text-align: left;">
+                    <span>🥄 1. Shovel</span>
+                </button>
+                <button class="block-selector" data-type="pickaxe" style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; background: #333; color: white; border: 1px solid #555; border-radius: 4px; cursor: pointer; text-align: left;">
+                    <span>⛏️ 2. Pickaxe</span>
+                </button>
+                <button class="block-selector" data-type="axe" style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; background: #333; color: white; border: 1px solid #555; border-radius: 4px; cursor: pointer; text-align: left;">
+                    <span>🪓 3. Axe</span>
+                </button>
+            </div>
+        </aside>
+
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+
         <aside id="sidebar">
             <h3>Block Inventory</h3>
             <button class="block-selector active" data-type="grass">
@@ -31,10 +50,9 @@
                 <span>Stone: <strong id="count-stone">0</strong></span>
             </button>
             <section class="instructions">
-                <p><strong>Controls:</strong><br>A / D: Move<br>Space: Jump<br>Click Canvas: Mine/Place</p>
+                <p><strong>Controls:</strong><br>A / D: Move<br>Space: Jump</p>
             </section>
         </aside>        
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
     </section>
     <!-- Hidden YouTube Player -->
     <section id="youtube-player"></section>

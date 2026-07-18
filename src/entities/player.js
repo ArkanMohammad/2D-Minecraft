@@ -22,8 +22,13 @@ function createPlayer(startX, startY) {
             this.x += this.vx;
             if (this.x < 0) this.x = 0;
             if (this.x + this.width > 800) this.x = 800 - this.width;
-            // Move vertically and process grid collisions
+            // Move vertically
             this.y += this.vy;
+            //Top edge - Stop player from leaving sky roof
+            if (this.y < 0) {
+                this.y = 0;
+                this.vy = 0; // Cancel remaining upward velocity instantly
+            }
             this.handleGridCollisions();
         },
         handleGridCollisions: function() {
@@ -35,11 +40,14 @@ function createPlayer(startX, startY) {
             const rowAtFeet = Math.floor(footY / tileSize);
             // Check if there is a solid block underneath the left or right side of the feet
             const leftBlockKey = `${leftCol},${rowAtFeet}`;
-            const rightBlockKey = `${rightCol},${rowAtFeet}`;
-            const hasBlockUnderLeft = grid && grid.matrix[leftBlockKey];
-            const hasBlockUnderRight = grid && grid.matrix[rightBlockKey];
-            if (hasBlockUnderLeft || hasBlockUnderRight) {
-                // If the player is falling downward, stop on top of the block
+            const rightBlockKey = `${rightCol},${rowAtFeet}`;            
+            // Check what block types are under his feet
+            const leftBlock = grid && grid.matrix[leftBlockKey];
+            const rightBlock = grid && grid.matrix[rightBlockKey];
+            // Only stop the player if the block is solid AND the player is NOT pressing S
+            const hasSolidLeft = leftBlock && leftBlock.type !== 'sky';
+            const hasSolidRight = rightBlock && rightBlock.type !== 'sky';
+           if ((hasSolidLeft || hasSolidRight)) {
                 if (this.vy > 0) {
                     this.y = (rowAtFeet * tileSize) - this.height;
                     this.vy = 0;
