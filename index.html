@@ -7,56 +7,77 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- The start screen displays your background wallpaper image -->
-    <section id="start-screen">
-        <header class="menu-content">
-            <h2 class="author-title">By Arkan Mohamad</h2>
-            <button id="play-button">Let's Play</button>
+    <!-- Start Screen -->
+    <section id="startScreen">
+        <header class="menuContent">
+            <h2 class="authorTitle">By Arkan Mohamad</h2>
+            <button id="playButton">Let's Play</button>
         </header>
     </section>
-    <!-- The gameplay layout (Hidden until you click Let's Play) -->
-    <section id="game-container" style="display: none; align-items: flex-start; gap: 20px;">
-        
-        <!-- شريط أدوات الهدم الجديد على اليسار (تمت إضافته بالكامل دون حذف أي شيء) -->
-        <aside id="tools-sidebar" style="background-color: #222; padding: 15px; border-radius: 5px; color: #fff; width: 180px; box-sizing: border-box;">
-            <h3 style="margin-top: 0; font-size: 16px; border-bottom: 1px solid #444; padding-bottom: 5px;">Mining Tools</h3>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="block-selector" data-type="shovel" style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; background: #333; color: white; border: 1px solid #555; border-radius: 4px; cursor: pointer; text-align: left;">
-                    <span>🥄 1. Shovel</span>
+    <!-- Game Container -->
+    <section id="gameContainer">
+        <!-- Left Sidebar -->
+        <article class="leftSidebar">
+            <!-- Mining Tools -->
+            <aside id="toolsSidebar">
+                <h3>Mining Tools</h3>
+                <button class="blockSelector" data-type="shovel">
+                    <span> 🥄  Shovel</span>
                 </button>
-                <button class="block-selector" data-type="pickaxe" style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; background: #333; color: white; border: 1px solid #555; border-radius: 4px; cursor: pointer; text-align: left;">
-                    <span>⛏️ 2. Pickaxe</span>
+                <button class="blockSelector" data-type="pickaxe">
+                    <span> ⛏️  Pickaxe</span>
                 </button>
-                <button class="block-selector" data-type="axe" style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; background: #333; color: white; border: 1px solid #555; border-radius: 4px; cursor: pointer; text-align: left;">
-                    <span>🪓 3. Axe</span>
+                <button class="blockSelector" data-type="axe">
+                    <span> 🪓  Axe</span>
                 </button>
-            </div>
-        </aside>
+            </aside>
+            <!-- Block Inventory -->
+            <aside id="sidebar">
+                <h3>Block Inventory</h3>
+                <button class="blockSelector active" data-type="grass">
+                    <i class="colorPreview grass"></i>
+                    <span>Grass:
+                        <strong id="countGrass">0</strong>
+                    </span>
+                </button>
+                <button class="blockSelector" data-type="dirt">
+                    <i class="colorPreview dirt"></i>
+                    <span>Dirt:
+                        <strong id="countDirt">0</strong>
+                    </span>
+                </button>
 
+                <button class="blockSelector" data-type="stone">
+                    <i class="colorPreview stone"></i>
+                    <span>Stone:
+                        <strong id="countStone">0</strong>
+                    </span>
+                </button>
+            </aside>
+        </article>
+        <!-- Game Canvas -->
         <canvas id="gameCanvas" width="800" height="600"></canvas>
-
-        <aside id="sidebar">
-            <h3>Block Inventory</h3>
-            <button class="block-selector active" data-type="grass">
-                <i class="color-preview grass"></i>
-                <span>Grass: <strong id="count-grass">0</strong></span>
-            </button>
-            <button class="block-selector" data-type="dirt">
-                <i class="color-preview dirt"></i>
-                <span>Dirt: <strong id="count-dirt">0</strong></span>
-            </button>
-            <button class="block-selector" data-type="stone">
-                <i class="color-preview stone"></i>
-                <span>Stone: <strong id="count-stone">0</strong></span>
-            </button>
-            <section class="instructions">
-                <p><strong>Controls:</strong><br>A / D: Move<br>Space: Jump</p>
-            </section>
-        </aside>        
+        <aside id="instructionsSidebar">
+            <h3>Instructions</h3>
+            <p><strong>Tools:</strong></p>
+            <p>🥄 Shovel → Mine Dirt</p>
+            <p>⛏️ Pickaxe → Mine Stone</p>
+            <p>🪓 Axe → Cut Grass & Flowers</p>
+            <hr class="instructionDivider">
+            <p><strong>Building:</strong></p>
+            <ul class="instructionList">
+                <li>Select a block from the Block Inventory.</li>
+                <li>Click a sky block to place it.</li>
+            </ul>
+            <hr class="instructionDivider">
+            <p><strong>Movement:</strong></p>
+            <p>A / D → Move</p>
+            <p>Space → Jump</p>
+        </aside>
     </section>
     <!-- Hidden YouTube Player -->
-    <section id="youtube-player"></section>
-    <!-- Script file connections -->
+    <section id="youtubePlayer"></section>
+    <!-- JavaScript Files -->
     <script src="src/core/app.js"></script>
     <script src="src/core/grid.js"></script>
     <script src="src/entities/blockManager.js"></script>

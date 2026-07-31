@@ -6,7 +6,7 @@ function createPlayer(startX, startY) {
         x: startX,
         y: startY,
         width: 24,
-        height: 50,
+        height: 40,
         vx: 0,
         vy: 0,
         gravity: 0.5,
@@ -58,6 +58,49 @@ function createPlayer(startX, startY) {
                 this.y = 600 - this.height;
                 this.vy = 0;
             }
+            // Horizontal collision
+            // Check for horizontal collisions with solid blocks on the left and right.
+            const topRow = Math.floor(this.y / tileSize);
+            const bottomRow = Math.floor((this.y + this.height - 1) / tileSize);
+            if (this.vx > 0) {
+                // Moving right
+                const rightCol = Math.floor((this.x + this.width) / tileSize);
+                for (let row = topRow; row <= bottomRow; row++) {
+                    const block = grid.matrix[`${rightCol},${row}`];
+                    if (block && block.type !== "sky") {
+                        this.x = rightCol * tileSize - this.width;
+                        this.vx = 0;
+                        break;
+                    }
+                }
+            }
+            if (this.vx < 0) {
+                // Moving left
+                const leftCol = Math.floor(this.x / tileSize);
+                for (let row = topRow; row <= bottomRow; row++) {
+                    const block = grid.matrix[`${leftCol},${row}`];
+                    if (block && block.type !== "sky") {
+                        this.x = (leftCol + 1) * tileSize;
+                        this.vx = 0;
+                        break;
+                    }
+                }
+            }
+            // Handle vertical collisions when jumping into blocks above the player.
+            if (this.vy < 0) {
+                const headY = Math.floor(this.y / tileSize);
+                const leftHeadCol = Math.floor(this.x / tileSize);
+                const rightHeadCol = Math.floor((this.x + this.width - 1) / tileSize);
+                const leftHeadBlock = grid.matrix[`${leftHeadCol},${headY}`];
+                const rightHeadBlock = grid.matrix[`${rightHeadCol},${headY}`];
+                const hitBlock =
+                    (leftHeadBlock && leftHeadBlock.type !== "sky") ||
+                    (rightHeadBlock && rightHeadBlock.type !== "sky");
+                if (hitBlock) {
+                    this.y = (headY + 1) * tileSize;
+                    this.vy = 0;
+                }
+            }            
         }
     };
 }

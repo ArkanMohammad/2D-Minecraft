@@ -41,10 +41,10 @@ function createGrid(cols, rows) {
                     counts[block.type]++;
                 }
             }
-            const grassEl = document.getElementById('count-grass');
-            const dirtEl = document.getElementById('count-dirt');
-            const stoneEl = document.getElementById('count-stone');
-            const skyEl = document.getElementById('count-sky');
+            const grassEl = document.getElementById('countGrass');
+            const dirtEl = document.getElementById('countDirt');
+            const stoneEl = document.getElementById('countStone');
+            const skyEl = document.getElementById('countSky');
             if (grassEl) grassEl.innerText = counts.grass;
             if (dirtEl) dirtEl.innerText = counts.dirt;
             if (stoneEl) stoneEl.innerText = counts.stone;

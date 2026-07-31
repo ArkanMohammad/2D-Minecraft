@@ -14,7 +14,7 @@ window.onYouTubeIframeAPIReady = function () {
 };
 const audioManager = {
     init() {
-        ytPlayer = new YT.Player("youtube-player", {
+        ytPlayer = new YT.Player("youtubePlayer", {
             height: "0",
             width: "0",
             videoId: "Jj74tRQuC9w",
@@ -38,11 +38,11 @@ const audioManager = {
 const gameState = {
     isStarted: false,
     initMenuController: function() {
-        const playBtn = document.getElementById('play-button');
+        const playBtn = document.getElementById('playButton');
         if (playBtn) {
             playBtn.addEventListener('click', () => {
-                document.getElementById('start-screen').style.display = 'none';
-                document.getElementById('game-container').style.display = 'flex';
+                document.getElementById('startScreen').style.display = 'none';
+                document.getElementById('gameContainer').style.display = 'flex';
                 this.isStarted = true;
                 // Move focus to window so keyboard controls work instantly
                 window.focus();
@@ -127,10 +127,10 @@ function initGame() {
         }
     });
     // UI Block Selector Event Listeners
-    const UISelectors = document.querySelectorAll('.block-selector');
+    const UISelectors = document.querySelectorAll('.blockSelector');
     UISelectors.forEach(element => {
         element.addEventListener('click', () => {
-            const activeEl = document.querySelector('.block-selector.active');
+            const activeEl = document.querySelector('.blockSelector.active');
             if (activeEl) {
                 activeEl.classList.remove('active');
             }
@@ -154,9 +154,7 @@ function handleCanvasClick(e) {
     const clickedGridY = Math.floor(mouseY / grid.tileSize);
     // Exit if click falls outside canvas bounds
     if (clickedGridX < 0 || clickedGridX >= grid.cols || clickedGridY < 0 || clickedGridY >= grid.rows) return;
-    
     const gridKey = `${clickedGridX},${clickedGridY}`;
-    
     // Clear yellow selected border on all blocks
     for (let key in grid.matrix) {
         if (grid.matrix[key]) {
@@ -166,22 +164,46 @@ function handleCanvasClick(e) {
     
     if (grid.matrix[gridKey]) {
         const targetBlock = grid.matrix[gridKey];
-     
-        if (activeSelectedType === 'shovel') {
-            // Mine Mode: If shovel is selected, replace current tile with sky
-            if (targetBlock.type !== 'sky') {
-                grid.matrix[gridKey] = createBlock(clickedGridX, clickedGridY, 'sky', blockImages.sky);
-                grid.matrix[gridKey].selected = true;
-            }
-        } else {
-            // Build Mode: If a block is chosen, replace sky tiles with it
-            if (targetBlock.type === 'sky') {
-                grid.matrix[gridKey] = createBlock(clickedGridX, clickedGridY, activeSelectedType, blockImages[activeSelectedType]);
-                grid.matrix[gridKey].selected = true;
-            }
+        // Shovel -  deleting dirt Block and replace to sky Block
+        if (activeSelectedType === "shovel" && targetBlock.type === "dirt"){
+            grid.matrix[gridKey] = createBlock(
+                clickedGridX,
+                clickedGridY,
+                "sky",
+                blockImages.sky
+            );
         }
-        
-        // Refresh sidebar counting balances
+        // Pickaxe -  deleting stone Block and replace to sky Block
+        else if (activeSelectedType === "pickaxe" && targetBlock.type === "stone") {
+            grid.matrix[gridKey] = createBlock(
+                clickedGridX,
+                clickedGridY,
+                "sky",
+                blockImages.sky
+            );
+        }
+        // Axe - deleting grass/flower Block and replace to sky Block
+        else if (activeSelectedType === "axe" &&
+        (targetBlock.type === "grass" || targetBlock.type === "flower")) {
+            grid.matrix[gridKey] = createBlock(
+                clickedGridX,
+                clickedGridY,
+                "sky",
+                blockImages.sky
+            );
+        }
+        // Building blocks
+        else if (
+            targetBlock.type === "sky" &&
+            ["grass", "dirt", "stone"].includes(activeSelectedType)
+        ) {
+            grid.matrix[gridKey] = createBlock(
+                clickedGridX,
+                clickedGridY,
+                activeSelectedType,
+                blockImages[activeSelectedType]
+            );
+        }
         grid.updateBlockCounts();
     }
 }
