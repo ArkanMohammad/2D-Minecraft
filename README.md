@@ -4,6 +4,13 @@
 
 ![Game Preview](src/screenshots/gamePreview2.png)
 
+## 🎮 Live Demo
+
+Play the game here:
+https://2d-minecraft-arkan.netlify.app/
+
+## 📌 About The Project
+
 A **2D Minecraft-inspired sandbox game** built using **HTML, CSS, and JavaScript Canvas**.
 
 This project recreates a block-based world where the player can explore, move through the terrain, mine different blocks using specialized tools, and build structures using available blocks.
