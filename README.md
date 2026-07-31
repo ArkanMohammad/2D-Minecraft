@@ -1,9 +1,8 @@
 # ⛏️ 2D Minecraft Grid Game
 
-![alt text](image-1.png)
+![Game Preview](screenshots/gamePreview1.png)
 
-
-![Game Preview](image.png)
+![Game Preview](screenshots/gamePreview2.png)
 
 A **2D Minecraft-inspired sandbox game** built using **HTML, CSS, and JavaScript Canvas**.
 
@@ -124,21 +123,21 @@ Select Block → Click Empty Space → Build
 
 ## Main Game World
 
-![alt text](image-3.png)
+![alt text](screenshots/mainGame.png)
 
 ## Block Inventory
 
-![alt text](image-5.png)
+![alt text](screenshots/blockInventory.png)
 
 
-## Mining System
+## Mining Tools
 
-![alt text](image-4.png)
+![alt text](screenshots/miningTools.png)
 
 
 ## Instructions
 
-![alt text](image-2.png)
+![alt text](screenshots/instructions.png)
 
 ---
 
@@ -147,20 +146,28 @@ Select Block → Click Empty Space → Build
 ```
 2D-Minecraft
 │
+├── .vscode
+│
 ├── src
-│   │
 │   ├── core
 │   │   ├── app.js
 │   │   └── grid.js
 │   │
 │   └── entities
-│       ├── blockManager.js
-│       └── player.js
+│       ├── player.js
+│       └── blockManager.js
+│
+├── screenshots
+│   ├── game-preview.png
+│   ├── inventory.png
+│   ├── mining.png
+│   ├── tools.png
+│   └── building.png
 │
 ├── index.html
 ├── style.css
-└── README.md
-```
+├── README.md
+└── .gitignore
 
 ---
 
